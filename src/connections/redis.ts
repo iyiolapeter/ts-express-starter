@@ -4,7 +4,7 @@ import { ClientOpts } from "redis";
 import { BaseConnection } from "./base";
 
 export enum PREFIX {
-	NULL = ""
+	NULL = "",
 }
 
 export const makeKey = (key: string, prefix: PREFIX | string = PREFIX.NULL) => {

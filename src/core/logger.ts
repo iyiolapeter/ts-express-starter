@@ -67,5 +67,4 @@ const LogStream = {
 	},
 };
 
-
 export { LogStream, NAMESPACE, Logger, requestTracer, getLogNamespace };

@@ -26,14 +26,12 @@ const Config = Object.freeze({
 	App: {
 		NAME: "",
 		ENV,
-		PORT: getEnv<number>("PORT",3200),
+		PORT: getEnv<number>("PORT", 3200),
 		LOG_DIR: getLogPath(),
-        PROD,
-        DEFAULT_CACHE_PERIOD: 3600
+		PROD,
+		DEFAULT_CACHE_PERIOD: 3600,
 	},
-	JobType: {
-		
-	}
+	JobType: {},
 });
 
 export = Config;

@@ -1,7 +1,5 @@
-
 import ejs from "ejs";
 import path from "path";
-
 
 export class Artifact {
 	public message: string | null = null;
@@ -13,7 +11,6 @@ export class Artifact {
 			this.message = message;
 		}
 	}
-
 }
 
 export interface Layout {

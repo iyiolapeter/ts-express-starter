@@ -8,12 +8,10 @@ export type RouterPathAlias = string;
 
 export type RouteCollection = Record<string, RouterPathAlias | express.Router>;
 
-export const routes: RouteCollection = {
-	
-};
+export const routes: RouteCollection = {};
 
 export const restAuth = bearerAuth({
-	strategy: ()=> ({ authorized: true }),
+	strategy: () => ({ authorized: true }),
 	excludedPaths: {
 		all: [],
 		get: [],
