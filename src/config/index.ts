@@ -31,6 +31,12 @@ const Config = Object.freeze({
 		PROD,
 		DEFAULT_CACHE_PERIOD: 3600,
 	},
+	MySQL: {
+		HOST: getEnv<string>("DB_HOST", ""),
+		DB: getEnv<string>("DB_NAME", ""),
+		USER: getEnv<string>("DB_USER", ""),
+		PASS: getEnv<string>("DB_PASS", ""),
+	},
 	JobType: {},
 });
 

@@ -32,6 +32,10 @@ type RedisAccessor = [string, (PREFIX | string)?];
 export interface RedisHash<T = Record<string, any>> {
 	get<R = any>(id: keyof T): R;
 }
+
+export interface RedisHashSaveOptions {
+	expire?: number;
+}
 export class RedisHash<T = Record<string, any>> extends Map<keyof T, any> {
 	public static get(key: string, field: string) {
 		return Redis.ActiveConnection.hget(key, field);
@@ -72,12 +76,23 @@ export class RedisHash<T = Record<string, any>> extends Map<keyof T, any> {
 		return this.__key;
 	}
 
-	public save() {
+	public async save(options: RedisHashSaveOptions = {}) {
 		const entries = [...this].map(entry => {
 			entry[1] = serialize(entry[1]);
 			return entry as HashEntry;
 		});
-		return Redis.ActiveConnection.hmset(this.getKey(), ...entries);
+		const saved = await Redis.ActiveConnection.hmset(this.getKey(), ...entries);
+		if (saved && options.expire) {
+			await Redis.ActiveConnection.expire(this.getKey(), options.expire);
+		}
+		return saved;
+	}
+
+	public toObject() {
+		return [...this].reduce((obj: any, entry) => {
+			obj[entry[0]] = entry[1];
+			return obj;
+		}, {});
 	}
 }
 

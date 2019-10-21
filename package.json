@@ -32,6 +32,7 @@
   "author": "Peter Iyiola",
   "license": "ISC",
   "devDependencies": {
+    "@types/bluebird": "^3.5.28",
     "@types/cls-hooked": "^4.3.0",
     "@types/cors": "^2.8.5",
     "@types/dotenv": "^6.1.1",
@@ -74,9 +75,12 @@
     "kue": "^0.11.6",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
+    "mysql2": "^1.7.0",
     "nodemailer": "^6.3.1",
     "obscure-email": "^1.0.7",
     "reflect-metadata": "^0.1.13",
+    "sequelize": "^5.21.1",
+    "sequelize-typescript": "^1.0.0",
     "shortid": "^2.2.15",
     "socket.io": "^2.3.0",
     "string-interpolation": "github:iyiolapeter/string-interpolation",
@@ -100,7 +104,11 @@
     "ext": "ts"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": ["npm run lint", "prettier --write", "git add"]
+    "*.{ts,tsx,js,jsx}": [
+      "npm run lint",
+      "prettier --write",
+      "git add"
+    ]
   },
   "husky": {
     "hooks": {
