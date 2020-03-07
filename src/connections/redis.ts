@@ -61,7 +61,7 @@ export class RedisHash<T = Record<string, any>> extends Map<keyof T, any> {
 	// tslint:disable-next-line: variable-name
 	private __key: string;
 
-	constructor(key: string, entries?: Record<keyof T, any> | Array<[keyof T, any]>) {
+	constructor(key: string, entries?: Record<keyof T, any> | [keyof T, any][]) {
 		if (Array.isArray(entries) || entries === undefined) {
 			super(entries);
 		} else if (typeof entries === "object") {

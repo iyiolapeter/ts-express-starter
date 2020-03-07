@@ -120,7 +120,7 @@ export const load = (definition: RouterDefinition) => {
 			} else {
 				let options = {};
 				const [path, validators, middlewares, controller] = route as RequestHandler;
-				const handlers: Array<MiddlewareSignature | ValidationChain> = [];
+				const handlers: (MiddlewareSignature | ValidationChain)[] = [];
 				if (Array.isArray(middlewares)) {
 					handlers.push(...middlewares);
 				} else {

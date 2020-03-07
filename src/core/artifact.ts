@@ -38,7 +38,7 @@ export class Content {
 	public async render() {
 		const view = (this.constructor as any).path(this.view);
 		if (!this.layout) {
-			return await ejs.renderFile<string>(view, this.params);
+			return await ejs.renderFile(view, this.params);
 		}
 		const layoutFile = (this.constructor as any).path(`layouts/${this.layout.name}`);
 		const content = this.layout.contentVar || "content";
@@ -47,7 +47,7 @@ export class Content {
 		}
 		this.params.layout = this.layout.params;
 		this.params.layout[content] = view;
-		return ejs.renderFile<string>(layoutFile, this.params, {
+		return ejs.renderFile(layoutFile, this.params, {
 			debug: false,
 		});
 	}
