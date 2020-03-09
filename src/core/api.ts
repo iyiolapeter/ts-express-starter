@@ -1,9 +1,13 @@
 import { Artifact } from "@core/artifact";
-import { AppError, NotFoundError, ServerError, ValidationError } from "@core/errors";
-import { Logger } from "@core/logger";
-import express from "express";
+import { AppError, ServerError, ValidationError } from "@core/errors";
+import { Event } from "@core/event";
+import { Logger, requestTracer } from "@core/logger";
 import { PathParams } from "express-serve-static-core";
 import { matchedData, ValidationChain, validationResult } from "express-validator";
+import bodyParser from "body-parser";
+import cors from "cors";
+import express from "express";
+import helmet from "helmet";
 
 export type SupportedHttpMethods = "get" | "post" | "put" | "patch" | "delete" | "head" | "trace" | "all";
 
@@ -29,6 +33,10 @@ export interface ValidatorDefinition {
 	validators: ValidationChain[];
 	options?: ValidatorOptions;
 }
+
+export type RouterPathAlias = string;
+
+export type RouteCollection = Record<string, RouterPathAlias | BaseRestApp | express.Router>;
 
 export const isRouter = (router: any) => {
 	const proto = Object.getPrototypeOf(router);
@@ -139,3 +147,55 @@ export const load = (definition: RouterDefinition) => {
 	}
 	return router;
 };
+
+const loadRouter = (modulePath: string) => {
+	try {
+		const router = require(modulePath);
+		if (isRouter(router)) {
+			return router as express.Router;
+		}
+		return false;
+	} catch (error) {
+		throw error;
+	}
+};
+
+export class BaseRestApp {
+	public app!: express.Application;
+
+	constructor(app?: express.Application) {
+		if (app) {
+			this.app = app;
+		}
+	}
+}
+
+export class RestApp extends BaseRestApp {
+	constructor(private routes: RouteCollection = {}) {
+		super();
+		this.app = express();
+		this.init();
+	}
+
+	private init() {
+		Event.emit("restapp:preinit", this);
+		this.app.use(cors());
+		this.app.use(requestTracer());
+		this.app.use(helmet());
+		this.app.use(bodyParser.json());
+		this.app.use(bodyParser.urlencoded({ extended: true }));
+		Event.emit("restapp:init", this);
+		this.bindRoutes();
+	}
+
+	private bindRoutes() {
+		Event.emit("restapp:routes:beforebind", this);
+		for (const [route, loc] of Object.entries(this.routes)) {
+			const router: express.Router | false = isRouter(loc) ? (loc as express.Router) : loadRouter(loc as string);
+			if (router) {
+				this.app.use(`/${route}`, router as express.Router);
+			}
+		}
+		Event.emit("restapp:routes:afterbind", this);
+	}
+}

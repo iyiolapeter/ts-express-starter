@@ -1,6 +1,7 @@
 import { config as loadOverrides } from "dotenv";
 import fs from "fs";
 import path from "path";
+import { addFileLogging } from "@core/logger";
 
 const ENV = process.env.NODE_ENV || "development";
 const PROD = ENV === "production";
@@ -39,5 +40,7 @@ const Config = Object.freeze({
 	},
 	JobType: {},
 });
+
+addFileLogging(Config.App.LOG_DIR);
 
 export = Config;

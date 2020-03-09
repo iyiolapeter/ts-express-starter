@@ -1,21 +1,27 @@
-import Redis from "@connections/redis";
 import { Logger } from "@core/logger";
-import { createQueue as factory, Job, ProcessCallback, Queue } from "kue";
+import { createQueue, Job, ProcessCallback, Queue, app } from "kue";
+import { BaseDb } from "./base";
 
-export const createQueue = () => {
-	return factory({
-		redis: {
-			createClientFactory: () => {
-				return Redis.createConnection().redis;
-			},
-		},
-		prefix: `queue`,
-	});
-};
+export { ProcessCallback as JobProcessor, Job, WorkerCtx, DoneCallback } from "kue";
 
-// The following order must be left as is compulsorily for queue to be initialized properly and work correctly
-export const queue = createQueue();
-export { app, ProcessCallback as JobProcessor, Job, WorkerCtx, DoneCallback } from "kue";
+export class KueDb extends BaseDb<Queue, Record<string, any>> {
+	public createConnection(options?: Record<string, any>, makeDefault?: boolean) {
+		let defaults: Record<string, any> = {};
+		if (options) {
+			defaults = { ...defaults, ...options };
+		}
+		this.config = defaults;
+		this.connection = createQueue(defaults);
+		if (makeDefault) {
+			KueDb.Default = this;
+		}
+		return this.connection;
+	}
+
+	public app() {
+		return app;
+	}
+}
 
 export const composeJobLogger = (job: Job) => {
 	return (message: string, isError = false) => {
@@ -38,22 +44,22 @@ export const saveJob = (job: Job) => {
 };
 
 interface WorkerOptions {
+	queue: Queue;
 	type: string;
 	concurrency?: number;
 }
 
 export class Worker {
 	public concurrency: number;
-	private canProcess: boolean = false;
 	private processor!: ProcessCallback;
 	private queue: Queue;
 
 	private readonly type: string;
 
-	constructor({ type, concurrency = 10 }: WorkerOptions) {
+	constructor({ queue, type, concurrency = 10 }: WorkerOptions) {
 		this.type = type;
 		this.concurrency = concurrency;
-		this.queue = createQueue();
+		this.queue = queue;
 	}
 
 	public getType() {

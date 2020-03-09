@@ -15,7 +15,7 @@ interface AuthOptions {
 	excludedPaths?: ExcludedPath;
 	strategy: (token: string, ctx?: express.Request) => AuthStrategyResponse | Promise<AuthStrategyResponse>;
 }
-export const bearerAuth = ({ headerKey = "Bearer", excludedPaths = [], strategy }: AuthOptions) => {
+export const BearerAuth = ({ headerKey = "Bearer", excludedPaths = [], strategy }: AuthOptions) => {
 	return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 		const runExclusions = (path: string, list: RegExp[]) => {
 			for (const exp of list) {

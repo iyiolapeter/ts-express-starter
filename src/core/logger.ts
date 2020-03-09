@@ -1,14 +1,13 @@
-import Config from "@config";
-import { getUniqueReference } from "@libs/utils";
+import { getUniqueReference } from "@core/utils";
 import { createNamespace, getNamespace } from "cls-hooked";
 import path from "path";
 import winston from "winston";
 import LogRotator from "winston-daily-rotate-file";
 
-const NAMESPACE = "log";
+export const NAMESPACE = "log";
 const logNamespace = createNamespace(NAMESPACE);
 
-const getLogNamespace = () => {
+export const getLogNamespace = () => {
 	return getNamespace(NAMESPACE);
 };
 
@@ -26,7 +25,7 @@ const logExtras = format(info => {
 	return info;
 });
 
-const requestTracer = () => {
+export const requestTracer = () => {
 	return (req: any, res: any, next: any) => {
 		if (logNamespace) {
 			const context = getUniqueReference();
@@ -41,7 +40,7 @@ const requestTracer = () => {
 	};
 };
 
-const Logger = createLogger({
+export const Logger = createLogger({
 	transports: [
 		new transports.Console({
 			level: "debug",
@@ -49,22 +48,25 @@ const Logger = createLogger({
 			format: format.combine(format.errors({ stack: true }), logExtras(), format.colorize(), format.simple()),
 			silent: false,
 		}),
-		new LogRotator({
-			level: "debug",
-			handleExceptions: true,
-			format: format.combine(format.errors({ stack: true }), format.timestamp(), logExtras(), format.simple()),
-			silent: false,
-			filename: path.resolve(Config.App.LOG_DIR, "%DATE%.log"),
-		}),
 	],
 });
 
 // export default Logger;
 
-const LogStream = {
+export const LogStream = {
 	write: (message: any) => {
 		Logger.info(message);
 	},
 };
 
-export { LogStream, NAMESPACE, Logger, requestTracer, getLogNamespace };
+export const addFileLogging = (logDir: string) => {
+	Logger.add(
+		new LogRotator({
+			level: "debug",
+			handleExceptions: true,
+			format: format.combine(format.errors({ stack: true }), format.timestamp(), logExtras(), format.simple()),
+			silent: false,
+			filename: path.resolve(logDir, "%DATE%.log"),
+		}),
+	);
+};

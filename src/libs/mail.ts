@@ -30,7 +30,7 @@ export const send = async (config: any, message: SendMailOptions) => {
 
 interface MailOptions {
 	source?: EmailSource;
-	to: Array<string | Address>;
+	to: (string | Address)[];
 	subject?: string;
 	text?: string;
 	html?: string;
@@ -42,7 +42,7 @@ export class Mail {
 
 	constructor(private options: MailOptions = { to: [] }) {}
 
-	public to(to: string | Address | Array<string | Address>, append: boolean = true) {
+	public to(to: string | Address | (string | Address)[], append: boolean = true) {
 		if (Array.isArray(to)) {
 			append ? this.options.to.push(...to) : (this.options.to = to);
 		} else {
