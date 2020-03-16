@@ -161,19 +161,15 @@ const loadRouter = (modulePath: string) => {
 };
 
 export class BaseRestApp {
-	public app!: express.Application;
+	
+	constructor(public app: express.Application) {
 
-	constructor(app?: express.Application) {
-		if (app) {
-			this.app = app;
-		}
 	}
 }
 
 export class RestApp extends BaseRestApp {
 	constructor(private routes: RouteCollection = {}) {
-		super();
-		this.app = express();
+		super(express());
 		this.init();
 	}
 
@@ -191,7 +187,7 @@ export class RestApp extends BaseRestApp {
 	private bindRoutes() {
 		Event.emit("restapp:routes:beforebind", this);
 		for (const [route, loc] of Object.entries(this.routes)) {
-			const router: express.Router | false = isRouter(loc) ? (loc as express.Router) : loadRouter(loc as string);
+			const router: express.Router | false = isRouter(loc) ? (loc as express.Router) :(loc instanceof BaseRestApp)? loc.app: loadRouter(loc as string);
 			if (router) {
 				this.app.use(`/${route}`, router as express.Router);
 			}
