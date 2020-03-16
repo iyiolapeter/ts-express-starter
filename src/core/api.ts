@@ -2,11 +2,11 @@ import { Artifact } from "@core/artifact";
 import { AppError, ServerError, ValidationError } from "@core/errors";
 import { Event } from "@core/event";
 import { Logger, requestTracer } from "@core/logger";
-import { PathParams } from "express-serve-static-core";
-import { matchedData, ValidationChain, validationResult } from "express-validator";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
+import { PathParams } from "express-serve-static-core";
+import { matchedData, ValidationChain, validationResult } from "express-validator";
 import helmet from "helmet";
 
 export type SupportedHttpMethods = "get" | "post" | "put" | "patch" | "delete" | "head" | "trace" | "all";
@@ -128,6 +128,7 @@ export const load = (definition: RouterDefinition) => {
 			} else {
 				let options = {};
 				const [path, validators, middlewares, controller] = route as RequestHandler;
+				// tslint:disable-next-line: array-type
 				const handlers: (MiddlewareSignature | ValidationChain)[] = [];
 				if (Array.isArray(middlewares)) {
 					handlers.push(...middlewares);
@@ -161,10 +162,7 @@ const loadRouter = (modulePath: string) => {
 };
 
 export class BaseRestApp {
-	
-	constructor(public app: express.Application) {
-
-	}
+	constructor(public app: express.Application) {}
 }
 
 export class RestApp extends BaseRestApp {
@@ -187,7 +185,11 @@ export class RestApp extends BaseRestApp {
 	private bindRoutes() {
 		Event.emit("restapp:routes:beforebind", this);
 		for (const [route, loc] of Object.entries(this.routes)) {
-			const router: express.Router | false = isRouter(loc) ? (loc as express.Router) :(loc instanceof BaseRestApp)? loc.app: loadRouter(loc as string);
+			const router: express.Router | false = isRouter(loc)
+				? (loc as express.Router)
+				: loc instanceof BaseRestApp
+				? loc.app
+				: loadRouter(loc as string);
 			if (router) {
 				this.app.use(`/${route}`, router as express.Router);
 			}

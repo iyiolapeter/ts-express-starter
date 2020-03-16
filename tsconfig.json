@@ -50,6 +50,7 @@
       "@config": ["config/index"],
       "@config/*": ["config/*"],
       "@core/*": ["core/*"],
+      "@connections":["connections/index"],
       "@connections/*": ["connections/*"],
       "@routes": ["routes/index"],
       "@routes/*": ["routes/*"],
