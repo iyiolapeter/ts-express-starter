@@ -34,13 +34,6 @@ const Config = Object.freeze({
 		DEFAULT_CACHE_PERIOD: 3600,
 		ErrorHandler: new ErrorHandler(),
 	},
-	MySQL: {
-		HOST: getEnv<string>("DB_HOST", ""),
-		DB: getEnv<string>("DB_NAME", ""),
-		USER: getEnv<string>("DB_USER", ""),
-		PASS: getEnv<string>("DB_PASS", ""),
-	},
-	JobType: {},
 });
 
 addFileLogging(Config.App.LOG_DIR);

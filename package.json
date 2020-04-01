@@ -80,7 +80,7 @@
     "ext": "ts"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
+    "*.{ts,tsx}": [
       "npm run fix",
       "prettier --write",
       "git add"
