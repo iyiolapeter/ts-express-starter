@@ -1,9 +1,15 @@
 import * as Validators from "@api/validators";
-import * as Api from "@core/api";
+import { RouteCollection, RouteLoader } from "@weaverkit/express";
 import { BearerAuth } from "../middlewares";
+import { App as AppConfig } from "@config";
+import { Content } from "@weaverkit/data";
 
-export const AppRoutes: Api.RouteCollection = {
-	docs: "@routes/docs",
+const { fromPath, fromDefinition } = new RouteLoader({
+	errorHandler: AppConfig.ErrorHandler,
+});
+
+export const routes: RouteCollection = {
+	docs: fromPath("@routes/docs"),
 };
 
 export const RestAuth = BearerAuth({

@@ -1,5 +1,5 @@
 import Config from "@config";
-import { Logger } from "@core/logger";
+import { Logger } from "@weaverkit/logger";
 import http from "http";
 import app from "./app";
 import { IO } from "./io";

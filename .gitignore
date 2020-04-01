@@ -6,3 +6,4 @@ application
 .DS_Store
 *.gql
 /coverage
+tslint-to-eslint-config.log

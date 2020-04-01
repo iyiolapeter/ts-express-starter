@@ -1,7 +1,8 @@
 import { config as loadOverrides } from "dotenv";
 import fs from "fs";
 import path from "path";
-import { addFileLogging } from "@core/logger";
+import { addFileLogging, Logger } from "@weaverkit/logger";
+import { ErrorHandler } from "@weaverkit/errors";
 
 const ENV = process.env.NODE_ENV || "development";
 const PROD = ENV === "production";
@@ -31,6 +32,7 @@ const Config = Object.freeze({
 		LOG_DIR: getLogPath(),
 		PROD,
 		DEFAULT_CACHE_PERIOD: 3600,
+		ErrorHandler: new ErrorHandler(),
 	},
 	MySQL: {
 		HOST: getEnv<string>("DB_HOST", ""),
@@ -42,5 +44,9 @@ const Config = Object.freeze({
 });
 
 addFileLogging(Config.App.LOG_DIR);
+
+Config.App.ErrorHandler.on("handle", (error: Error) => {
+	Logger.error("Bubbled Error: ", error);
+});
 
 export = Config;

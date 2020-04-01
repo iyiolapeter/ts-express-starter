@@ -1,4 +1,4 @@
-import { SupportedHttpMethods } from "@core/api";
+import { SupportedHttpMethods } from "@weaverkit/express";
 import express from "express";
 
 interface AuthStrategyResponse {
