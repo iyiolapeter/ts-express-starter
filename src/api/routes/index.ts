@@ -1,9 +1,8 @@
-import * as Validators from "@api/validators";
 import { RouteCollection, RouteLoader } from "@weaverkit/express";
 import { BearerAuth } from "../middlewares";
 import { App as AppConfig } from "@config";
 
-const { fromPath, fromDefinition } = RouteLoader({
+const { fromPath } = RouteLoader({
 	errorHandler: AppConfig.ErrorHandler,
 });
 
@@ -12,7 +11,9 @@ export const routes: RouteCollection = {
 };
 
 export const RestAuth = BearerAuth({
-	strategy: () => ({ authorized: true }),
+	strategy: (token, ctx) => {
+		return { authorized: true };
+	},
 	excludedPaths: {
 		all: [/^\/docs(\/?)/],
 		get: [],
