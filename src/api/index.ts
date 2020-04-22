@@ -21,15 +21,17 @@ WeaverApp.on(WeaverExpressAppEvents.PREINIT, (app: Application) => {
 			next();
 		});
 	});
+	const format =
+		':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] - :response-time ms :total-time ms ":referrer" ":user-agent"';
 	app.use(
-		morgan("combined", {
+		morgan(format, {
 			stream: LogStream,
-			skip: req => {
-				return req.originalUrl.startsWith("/queue");
-			},
+			// skip: req => {
+			// 	return req.originalUrl.startsWith("/queue");
+			// },
 		}),
 	);
-	app.use("/assets", express.static(path.join(__dirname, "./../assets")));
+	app.use("/assets", express.static(path.join(__dirname, "./../../assets")));
 	app.use(RestAuth);
 });
 
@@ -40,4 +42,4 @@ WeaverApp.once(WeaverExpressAppEvents.ROUTES_DID_BIND, (app: Application) => {
 
 WeaverApp.init();
 
-export default (WeaverApp as any).app;
+export default WeaverApp.app;

@@ -5,7 +5,7 @@ const WORKER_DIR = BASE_DIR+'/workers/';
 
 Apps.push({
     name: 'app-server',
-    script: BASE_DIR+'index.js',
+    script: BASE_DIR+'server.js',
     exec_mode: 'fork',
     instances: 1
 });

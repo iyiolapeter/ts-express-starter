@@ -4,12 +4,12 @@
   "description": "TS Express Starter",
   "main": "application/index.js",
   "scripts": {
-    "start": "npm run build && npm run link && cross-env NODE_ENV=development node application/index.js",
-    "start:staging": "npm run build && cross-env NODE_ENV=staging node application/index.js",
+    "start": "npm run build && npm run link && cross-env NODE_ENV=development node application/server.js",
+    "start:staging": "npm run build && cross-env NODE_ENV=staging node application/server.js",
     "test": "jest --watch",
     "coverage": "jest --coverage",
-    "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" \"views/**/*.ejs\"",
+    "build": "tsc -p tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"src/**/*.js\" \"views/**/*.ejs\"",
     "lint": "tslint -p tsconfig.json",
     "fix": "tslint --fix -p tsconfig.json",
     "link": "link-module-alias",
@@ -33,24 +33,18 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "@types/bluebird": "^3.5.30",
     "@types/dotenv": "^8.2.0",
-    "@types/express": "^4.17.4",
-    "@types/jest": "^25.1.4",
-    "@types/jsonwebtoken": "^8.3.8",
-    "@types/lodash": "^4.14.149",
+    "@types/express": "^4.17.6",
+    "@types/jest": "^25.2.1",
     "@types/morgan": "^1.9.0",
-    "@types/node": "^13.9.1",
-    "@types/passport": "^1.0.3",
-    "@types/passport-http-bearer": "^1.0.35",
-    "@types/socket.io": "^2.1.4",
+    "@types/node": "^13.13.2",
     "@types/validator": "^12.0.1",
     "commitizen": "^4.0.4",
-    "husky": "^4.2.3",
-    "jest": "^25.1.0",
+    "husky": "^4.2.5",
+    "jest": "^25.4.0",
     "link-module-alias": "^1.2.0",
-    "lint-staged": "^10.0.8",
-    "nodemon": "^2.0.2",
+    "lint-staged": "^10.1.7",
+    "nodemon": "^2.0.3",
     "prettier": "^1.19.1",
     "ts-jest": "^25.3.0",
     "tslint": "^6.1.0",
@@ -58,21 +52,18 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@weaverkit/data": "0.0.8",
-    "@weaverkit/errors": "0.0.8",
-    "@weaverkit/express": "0.0.8",
-    "@weaverkit/logger": "0.0.8",
-    "@weaverkit/utils": "0.0.8",
+    "@weaverkit/data": "0.0.9",
+    "@weaverkit/errors": "0.0.9",
+    "@weaverkit/express": "0.0.9",
+    "@weaverkit/logger": "0.0.9",
+    "@weaverkit/utils": "0.0.9",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "morgan": "^1.9.1",
     "openapi3-ts": "^1.3.0",
-    "passport": "^0.4.1",
-    "passport-http-bearer": "^1.0.1",
-    "reflect-metadata": "^0.1.13",
-    "socket.io": "^2.3.0"
+    "reflect-metadata": "^0.1.13"
   },
   "nodemonConfig": {
     "ignore": [
@@ -96,8 +87,8 @@
   },
   "husky": {
     "hooks": {
-        "pre-commit": "lint-staged && npm run build",
-        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "lint-staged && npm run build",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "config": {
