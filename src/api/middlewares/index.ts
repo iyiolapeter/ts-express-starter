@@ -62,7 +62,7 @@ export const BearerAuth = ({ headerKey = "Bearer", excludedPaths = [], strategy 
 					return next();
 				}
 				throw new UnauthorizedError().setInfo(state);
-			} catch (error) {
+			} catch (error: any) {
 				if (error instanceof AppError) {
 					throw error;
 				}

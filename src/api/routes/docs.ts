@@ -1,9 +1,9 @@
 import { View } from "@api/view";
 import { getSpec } from "@api/specs";
-import { createRouter } from "@weaverkit/express";
+import { CreateRouter } from "@weaverkit/express";
 
 const spec = getSpec();
-const router = createRouter();
+const router = CreateRouter();
 
 router.get("/", async (req, res) => {
 	const view = new View({

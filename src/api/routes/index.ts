@@ -2,9 +2,7 @@ import { RouteCollection, RouteLoader } from "@weaverkit/express";
 import { BearerAuth } from "../middlewares";
 import { App as AppConfig } from "@config";
 
-const { fromPath } = RouteLoader({
-	errorHandler: AppConfig.ErrorHandler,
-});
+const { fromPath } = RouteLoader();
 
 export const routes: RouteCollection = {
 	docs: fromPath("@routes/docs"),

@@ -27,7 +27,7 @@ WeaverApp.on(WeaverExpressAppEvents.PREINIT, (app: Application) => {
 		morgan(format, {
 			stream: LogStream,
 			// skip: req => {
-			// 	return req.originalUrl.startsWith("/queue");
+			// 	return req.originalUrl.startsWith("/somepath");
 			// },
 		}),
 	);

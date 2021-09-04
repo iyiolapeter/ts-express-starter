@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 (async () => {
 	try {
-		await new Promise(resolve => {
+		await new Promise<void>((resolve) => {
 			server.listen(Config.App.PORT, () => {
 				Logger.info(`Running on localhost:${Config.App.PORT}`);
 				Logger.info(`Running Environment: ${Config.App.ENV}`);
